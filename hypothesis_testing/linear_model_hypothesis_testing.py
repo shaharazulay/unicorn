@@ -32,7 +32,9 @@ def _create_parser():
         description=textwrap.dedent('''\
             Hypothesis testing using linear regression theory. '''),
         epilog=textwrap.dedent('''\
-        Examples:                                                                                                 python linear_model_hypothesis_testing.py --x x.pkl --y y.pkl ''')
+        Examples:             
+        python linear_model_hypothesis_testing.py
+        --x _sample_data/x.pkl --y _sample_data/y.pkl ''')
     )
 
     _add_x_input_to_parser(parser)
