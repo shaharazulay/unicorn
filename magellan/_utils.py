@@ -2,10 +2,10 @@ from _deletion import Cnv
 import argparse
 
 
-def _add_gene_spec_path_to_parser(parser):
+def _add_client_gene_reads_path_to_parser(parser):
     parser.add_argument(
-        '--df_gene_spec_path',
-        dest='df_gene_spec_path',
+        '--client_gene_reads_path',
+        dest='client_gene_reads_path',
         required='True',
         help='the path of the reads dataframe')
 
@@ -15,7 +15,7 @@ def _add_abundance_path_to_parser(parser):
         '--df_abund_path',
         dest='df_abund_path',
         required='True',
-        help='the path of the specie abandance dataframe')
+        help='the path of the species abandance dataframe')
 
     
 def _add_reads_path_to_parser(parser):
@@ -184,7 +184,7 @@ def _main():
     _add_abundance_path_to_parser(parser)
     _add_deletion_flag_to_parser(parser)
     _add_gene_length_path_to_parser(parser)
-    _add_gene_spec_path_to_parser(parser)
+    _add_client_gene_reads_path_to_parser(parser)
     _add_interval_sort_frac_to_parser(parser)
     _add_max_deletion_z_score_bound_to_parser(parser)
     _add_max_expeted_copy_number_to_parser(parser)
@@ -203,7 +203,7 @@ def _main():
     args = parser.parse_args()
 
     cnv = Cnv(
-        args.df_gene_spec_path,
+        args.client_gene_reads_path,
         args.df_abund_path,
         args.df_nr_path,
         args.df_length_path)
