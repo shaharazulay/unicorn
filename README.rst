@@ -7,4 +7,5 @@ Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
     :target: https://raw.githubusercontent.com/shaharazulay/unicorn/master/magallen/LICENSE.md
     
     
-collaborative microbiome metagenomics research - DayTwo and WZ institute
+    
+Collaborative Microbiome metagenomics research - DayTwo and WZ institute
