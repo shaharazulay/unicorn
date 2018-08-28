@@ -2,7 +2,7 @@ import unittest
 import os
 import pandas as pd
 
-_sample_data_dir = './sample_data/'
+_sample_data_dir = '../sample_data/'
 
 
 class _TestDropDuplication(unittest.TestCase):
