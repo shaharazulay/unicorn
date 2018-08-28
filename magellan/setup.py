@@ -22,16 +22,16 @@ class _TestCommand(Command):
 
 
 setup(
-    name='magallen',
+    name='magellan',
     version='0.0.1',
     author='Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen',
     author_email='shahar4@gmail.com',
     url='https://github.com/shaharazulay/unicorn/magallen',
     packages=[
-        'magallen'
+        'magellan'
     ],
     license='bsd',
-    description='Traceable Python dictionary',
+    description='Detection of gene-level deletions, to uncover new bacterial strains',
     long_description=open('README.rst').read(),
     install_requires=[],
     zip_safe=False,
