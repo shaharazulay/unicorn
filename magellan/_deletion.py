@@ -13,6 +13,12 @@ class DeletionDetector:
         self.species_abund_path = species_abund_path
         self.client_total_reads_path = client_total_reads_path
         self.gene_length_path = gene_length_path
+
+        self.client_gene_reads = pd.read_pickle(self.client_gene_reads_path).astype('float32')
+        self.species_abund = pd.read_pickle(self.species_abund_path).astype('float32')
+        self.client_total_reads = pd.read_pickle(self.client_total_reads_path).astype('float32')
+        # Tmp tali - why is this the only one with different structure (species/uniref not in index)
+        self.gene_length = pd.read_pickle(self.gene_length_path)
         
     def set_table_of_k(self):
         self.df_k = pd.DataFrame(
@@ -76,6 +82,7 @@ class DeletionDetector:
         # 3. compute deletions only on specified bacteria
         # 4. sort?
         
+        #Tmp tali - copied this also to init. Currently, we run members over, so need to keep it still here. best if we don't
         self.client_gene_reads = pd.read_pickle(self.client_gene_reads_path).astype('float32')
         self.species_abund = pd.read_pickle(self.species_abund_path).astype('float32')
         self.client_total_reads = pd.read_pickle(self.client_total_reads_path).astype('float32')
@@ -150,7 +157,7 @@ class DeletionDetector:
             .drop_duplicates(['species', 'uniref90'], keep=False)\
             .set_index(['species', 'uniref90'])
                 
-        self.gene_length = self.gene_length\
+        self.gene_length = self.gene_length.reset_index()\
             .drop_duplicates(['species', 'uniref90'], keep=False)
         
     def remove_short_genes_and_get_lengths_vector(self, min_length):
