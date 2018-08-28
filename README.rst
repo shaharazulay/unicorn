@@ -1,4 +1,4 @@
-# unicorn
+Unicorn
 ========
 
 Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
