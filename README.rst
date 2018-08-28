@@ -1,11 +1,28 @@
 Unicorn
 ========
 
+**Collaborative microbiome metagenomics research - DayTwo and WZ institute**
+
+.. image:: https://github.com/shaharazulay/unicorn/blob/master/logo.png
+
 Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
 
-.. image:: https://img.shields.io/badge/license-BSD--3--Clause-brightgreen.svg
-    :target: https://raw.githubusercontent.com/shaharazulay/unicorn/master/magallen/LICENSE.md
+   
+|Travis|_ |Codecov|_ |Python27|_ |Python35|_ |License|_
+
+.. |License| image:: https://img.shields.io/badge/license-BSD--3--Clause-brightgreen.svg
+.. _License: https://github.com/shaharazulay/unicorn/blob/master/LICENSE
+   
+.. |Travis| image:: https://travis-ci.org/shaharazulay/unicorn.svg?branch=master
+.. _Travis: https://travis-ci.org/shaharazulay/unicorn
+
+.. |Codecov| image:: https://codecov.io/gh/shaharazulay/unicorn/branch/master/graph/badge.svg
+.. _Codecov: https://codecov.io/gh/shaharazulay/unicorn
     
-    
-    
-Collaborative Microbiome metagenomics research - DayTwo and WZ institute
+.. |Python27| image:: https://img.shields.io/badge/python-2.7-blue.svg
+.. _Python27:
+
+.. |Python35| image:: https://img.shields.io/badge/python-3.5-blue.svg
+.. _Python35:
+
+
