@@ -1,6 +1,8 @@
 Magellan
 =========
 
+.. image:: https://github.com/shaharazulay/unicorn/blob/master/magellan/docs/log.gif
+
 Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
 
 .. image:: https://img.shields.io/badge/license-BSD--3--Clause-brightgreen.svg
