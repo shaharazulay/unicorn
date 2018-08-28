@@ -10,12 +10,14 @@ install:
   - cd magellan
   - pip install -r requirements.txt
   - python setup.py install
+  - cd ..
 
 script: 
   # magellan
   - cd magellan
   - python setup.py test
   - coverage run test/_test.py
+  - cd ..
   
 after_success:
   - codecov
