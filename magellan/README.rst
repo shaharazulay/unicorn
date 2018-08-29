@@ -1,7 +1,7 @@
 MageLlan
 =========
 
-**Detection of gene-level absence, to uncover new bacterial strains**
+**Detection of gene-level absences, to uncover new bacterial strains**
 
 .. image:: https://github.com/shaharazulay/unicorn/blob/master/magellan/docs/logo.jpg
 
