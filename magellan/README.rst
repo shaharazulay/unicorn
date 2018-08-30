@@ -1,4 +1,4 @@
-MageLlan
+MageLlAn
 =========
 
 **Detection of gene-level absences, to uncover new bacterial strains**
