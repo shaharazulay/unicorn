@@ -176,7 +176,7 @@ class DeletionDetector:
         self.client_gene_reads = self.client_gene_reads.astype('float32')
 
         # Tmp tali - this is turned into an array. Safer if kept as DF
-        self.relevant_gene_lengths.set_index(['specie', 'uniref90'], inplace=True)
+        self.relevant_gene_lengths.set_index(['species', 'uniref90'], inplace=True)
         self.relevant_gene_lengths = self.relevant_gene_lengths.loc[self.client_gene_reads.index.values.tolist()]
     
     def inflate(self):
