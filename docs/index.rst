@@ -12,4 +12,4 @@ Contents
    :maxdepth: 3
 
    overview
-   ../magellan/docs/index.rst
+   magellan_link
