@@ -12,4 +12,4 @@ Contents
    :maxdepth: 3
 
    overview
-   ../magellan/docs/*
+   MageLlan <megellan_link.rst>
