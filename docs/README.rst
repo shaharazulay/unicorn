@@ -3,7 +3,7 @@ Unicorn
 
 **Collaborative Microbiome Metagenomics Research @DayTwo and @Weizmann institute**
 
-.. image:: https://github.com/shaharazulay/unicorn/blob/master/logo.png
+.. image:: _static/logo.png
 
 Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
 
