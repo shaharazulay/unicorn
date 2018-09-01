@@ -12,4 +12,6 @@ Contents
    :maxdepth: 4
 
    overview
-   MageLlan <magellan_link.rst>
+   
+.. automodule:: magellan
+   :members:
