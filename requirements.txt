@@ -1,0 +1,3 @@
+# magellan
+pandas >= 0.18.0
+numpy >= 1.11.1
