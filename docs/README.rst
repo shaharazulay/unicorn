@@ -1,7 +1,9 @@
 Unicorn
 ========
 
-**Collaborative Microbiome Metagenomics Research @DayTwo and @Weizmann institute**
+ @DayTwo
+ @Weizmann institute
+**Collaborative Microbiome Metagenomics Research**
 
 .. image:: _static/logo.png
 
