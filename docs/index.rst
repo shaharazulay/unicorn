@@ -12,6 +12,5 @@ Contents
     :maxdepth: 3
     
     overview
-    examples
-    api
+    magellan_link
 
