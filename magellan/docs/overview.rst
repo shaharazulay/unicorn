@@ -1,3 +1,5 @@
+.. include:: README.rst
+
 .. _adapting:
 
 The Stacking Ensemble
