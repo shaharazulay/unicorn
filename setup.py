@@ -1,16 +1,30 @@
-# script.py
-import argparse
+# setup wrapper for unicorn
 from subprocess import call
+import sys
+import glob
+import os
+
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('cmd', type=str, help='setup command')
-    
-    args = parser.parse_args()
-    cmd = args.cmd
-    
-    # magellan
-    call(["python", "magellan/setup.py", cmd])
+    args = [arg for arg in sys.argv[1:]]
+   
+    for module in glob.glob('*'):
+        if os.path.isdir(module):
+            if ('docs' in module)\
+               or ('build' in module)\
+               or ('dist' in module)\
+               or ('egg' in module):
+                continue
+
+            print '-------> trying to operate on module: ', module
+
+            try:
+                call(
+                    ["python", "setup.py"] + args,
+                    cwd=module)
+            except Exception:
+                print 'cannot operate on module %s' % module
+
     
     
