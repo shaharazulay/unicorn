@@ -1,8 +1,5 @@
 .. include:: README.rst
 
-Contents
-========
-
 .. toctree::
    :hidden:
 
