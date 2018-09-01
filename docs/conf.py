@@ -26,22 +26,22 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 master_doc = 'index'
-project =  u'Stacker'
-copyright = '2017, Shahar Azulay, Ariel Hanemann'
+project =  u'Unicorn'
+copyright = '2018, Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen'
 
 version = '1.0'
 release = '1.0'
 exclude_patterns = ['_build']
 default_role = 'obj'
 
-htmlhelp_basename = 'Stacker'
+htmlhelp_basename = 'Unicorn'
 latex_documents = [
-    (master_doc, 'Stacker.tex', u'Stacker Documentation',
-     u'Shahar Azulay, Ariel Hanemann', 'manual'),
+    (master_doc, 'Unicorn.tex', u'Unicorn Documentation',
+     u'Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen', 'manual'),
 ]
 man_pages = [
-    (master_doc, 'stacker', u'Stacker Documentation',
-     [u'Shahar Azulay, Ariel Hanemann'], 1)
+    (master_doc, 'stacker', u'Unicorn Documentation',
+     [u' Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen'], 1)
 ]
 
 exclude_patterns = [
@@ -59,7 +59,7 @@ exclude_patterns = [
 # documentation.
 html_theme_options = {
     'github_user': 'shaharazulay',
-    'github_repo': 'stacker',
+    'github_repo': 'unicorn',
     'github_button': True,
     'github_banner': True,
     'page_width': '100%',
