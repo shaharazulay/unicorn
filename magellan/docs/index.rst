@@ -9,9 +9,6 @@ Contents
    self
 
 .. toctree::
-    :maxdepth: 3
-    
-    overview
-    examples
-    api
+   :maxdepth: 4
 
+   MageLlan <magellan_link.rst>
