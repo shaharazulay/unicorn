@@ -1,1 +1,1 @@
-.. include:: ../magellan/docs/overview.rst
+.. include:: ../magellan/docs/index.rst
