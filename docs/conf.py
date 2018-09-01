@@ -21,6 +21,9 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
 ]
+
+src_paths = [ '../magellan/docs', '../']
+
 templates_path = ['_templates']
 
 source_suffix = '.rst'
