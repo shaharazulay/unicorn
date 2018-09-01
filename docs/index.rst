@@ -9,7 +9,7 @@ Contents
    self
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 3
 
    overview
    MageLlan <magellan_link>
