@@ -3,6 +3,7 @@ Unicorn
 
 @DayTwo
 @Weizmann Institute of Science
+
 **Collaborative Microbiome Metagenomics Research**
 
 .. image:: _static/logo.png
