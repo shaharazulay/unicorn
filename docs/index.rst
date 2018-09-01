@@ -12,4 +12,4 @@ Contents
    :maxdepth: 3
 
    overview
-   magellan_link
+   MageLlan <magellan_link>
