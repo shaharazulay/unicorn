@@ -8,4 +8,5 @@
 .. toctree::
    :caption: MageLlan
 
-   magellan_link
+   ../magellan/docs/overview.rst
+   ../magellan/docs/details.rst
