@@ -8,4 +8,4 @@
 .. toctree::
    :caption: MageLlan
 
-   magellan_index
+   magellan_link
