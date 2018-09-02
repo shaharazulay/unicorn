@@ -7,7 +7,7 @@ import sphinx_rtd_theme
 from recommonmark.parser import CommonMarkParser
 
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../magellan/docs'))
+sys.path.insert(0, os.path.abspath('../../magellan/docs'))
 
 sys.path.append(os.path.dirname(__file__))
 sys.path.append(os.path.abspath('_ext'))
@@ -23,8 +23,6 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
 ]
-
-src_paths = [ '../magellan/docs', '../']
 
 templates_path = ['_templates']
 
