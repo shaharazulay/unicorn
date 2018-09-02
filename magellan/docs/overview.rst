@@ -1,6 +1,6 @@
 .. _adapting:
 
-MageLlan
+Description
 ===================
 
 Background
