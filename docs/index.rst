@@ -1,14 +1,11 @@
 .. include:: README.rst
 
-Contents
-========
-
 .. toctree::
-   :hidden:
-
-   self
-
-.. toctree::
+   :caption: The Unicorn Project
 
    overview
-   MageLlan <magellan_link>
+  
+.. toctree::
+   :caption: MageLlan
+
+   magellan_index
