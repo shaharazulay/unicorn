@@ -8,5 +8,6 @@
 .. toctree::
    :caption: MageLlan
 
-   /../magellan/docs/overview
-   /../magellan/docs/details
+   magellan_readme
+   magellan_overview
+   magellan_details
