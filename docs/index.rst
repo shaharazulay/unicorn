@@ -8,5 +8,5 @@
 .. toctree::
    :caption: MageLlan
 
-   ../magellan/docs/overview.rst
-   ../magellan/docs/details.rst
+   /../magellan/docs/overview
+   /../magellan/docs/details
