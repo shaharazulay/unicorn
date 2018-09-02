@@ -1,7 +1,7 @@
 .. include:: README.rst
 
 .. toctree::
-   :caption: The Unicorn Project
+   :caption: Unicorn
 
    overview
   
