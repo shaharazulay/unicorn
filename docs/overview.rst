@@ -4,14 +4,14 @@ The Unicorn Project
 ===================
 
 Background
------
+-----------
 
 <TBD>
 
 
 
 Relevant Modules
------
+-----------------
 
 Relevant modules included in Unicorn are:
 
@@ -22,7 +22,7 @@ Relevant modules included in Unicorn are:
 
 
 Detailed Desciription
------
+----------------------
 
 <TBD>
 
