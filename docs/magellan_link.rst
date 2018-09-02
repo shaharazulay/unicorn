@@ -1,1 +1,1 @@
-.. include:: ../magellan/docs/magellan_index.rst
+.. include:: ../magellan/docs/README.rst
