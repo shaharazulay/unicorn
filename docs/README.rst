@@ -25,4 +25,7 @@ Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
 .. |Python35| image:: https://img.shields.io/badge/python-3.5-blue.svg
 .. _Python35:
 
+.. |Documentation| image:: _static/readthedocs_logo.jpg
+.. _Documentation: https://unicorn-project.readthedocs.io/en/latest/
 
+|Documentation|_
