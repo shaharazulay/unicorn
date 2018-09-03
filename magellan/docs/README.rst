@@ -3,7 +3,7 @@ MageLlan
 
 **Detection of gene-level absences, to uncover new bacterial strains**
 
-.. image:: _static/magellan_logo.jpg
+.. image:: /magellan/docs/_static/magellan_logo.jpg
 
 Shahar Azulay, Tali Raveh, Ariel Hanemann, Yossi Cohen
 
