@@ -1,4 +1,3 @@
-import os
 import subprocess
 
 # Do we want to install bowtie? do we want to adapt to windows?
@@ -22,19 +21,16 @@ def _check_bowtie_install():
 def bowtie2_build_index(fasta_file, index, offrate=None):
     cmd = 'bowtie2-build %s %s' % (fasta_file, index)
     if offrate:
-        cmd = cmd + '-o ' + offrate
+        cmd = cmd + ' -o ' + str(offrate)
     print 'running: ', cmd
     _check_bowtie_install()
     
-    '''
     _, err = subprocess.Popen(cmd,
                               stderr=subprocess.PIPE,
                               shell=True).communicate()
-    if err:
-        raise RuntimeError('bowtie index building failed for fasta %s' % (fasta_file))
-    '''
-    
 
+    
+    
 def bowtie2_map(
         fastq_file,
         index,
