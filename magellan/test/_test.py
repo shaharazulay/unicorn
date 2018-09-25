@@ -1,6 +1,7 @@
 import unittest
 import os
 import pandas as pd
+import glob
 
 import magellan
 
@@ -63,7 +64,85 @@ class _TestShortGeneRemoval(unittest.TestCase):
         self.assertLess(len(relevant_genes), len(deldet.gene_length))
     
         self.assertGreaterEqual(relevant_genes.length.max(), min_len / 1000.)
+
+        
+class _TestBowtie2Index(unittest.TestCase):
+    def test_basic(self):
+        magellan.bowtie2_build_index(
+            os.path.join(_sample_data_dir, 'sample_bac_genome_short.fa'),
+            os.path.join(_sample_data_dir, 'test_index'))
+
+        index_files = glob.glob(os.path.join(_sample_data_dir, 'test_index.*'))
+        for i in index_files:
+            os.remove(i)
             
+        magellan.bowtie2_build_index(
+            os.path.join(_sample_data_dir, 'sample_bac_genome_short.fa'),
+            os.path.join(_sample_data_dir, 'test_index_offrate'),
+            offrate=2
+        )
+
+        offrate_index_files = glob.glob(os.path.join(_sample_data_dir, 'test_index_offrate.*'))
+        for i in offrate_index_files:
+            os.remove(i)
+
+    def test_missing_fasta(self):
+        with self.assertRaises(RuntimeError):
+            magellan.bowtie2_build_index(
+                os.path.join(_sample_data_dir, 'madeup.fa'),
+                os.path.join(_sample_data_dir, 'test_index'))
+
+
+class _TestBowtie2Mapping(unittest.TestCase):
+    def test_basic(self):
+        magellan.bowtie2_build_index(
+            os.path.join(_sample_data_dir, 'sample_bac_genome_short.fa'),
+            os.path.join(_sample_data_dir, 'test_index'))
+
+        magellan.bowtie2_map(
+            os.path.join(_sample_data_dir, 'sample_reads_for_mapper.fastq'),
+            os.path.join(_sample_data_dir, 'test_index'),
+            os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'),
+            os.path.join(_sample_data_dir, 'sample_reads_for_mapper.log'))
+        
+        index_files = glob.glob(os.path.join(_sample_data_dir, 'test_index'))
+        
+        for i in index_files:
+            os.remove(i)
+
+        os.remove(os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'))
+        os.remove(os.path.join(_sample_data_dir, 'sample_reads_for_mapper.log'))
+        
+    def test_missing_inputs(self):
+        magellan.bowtie2_build_index(
+            os.path.join(_sample_data_dir, 'sample_bac_genome_short.fa'),
+            os.path.join(_sample_data_dir, 'test_index'))
+
+        with self.assertRaises(RuntimeError):
+            magellan.bowtie2_map(
+                os.path.join(_sample_data_dir, 'madeup.fastq'),
+                os.path.join(_sample_data_dir, 'test_index'),
+                os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'),
+                os.path.join(_sample_data_dir, 'sample_reads_for_mapper.log'))
+
+        with self.assertRaises(RuntimeError):
+            magellan.bowtie2_map(
+                os.path.join(_sample_data_dir, 'sample_reads_for_mapper.fastq'),
+                os.path.join(_sample_data_dir, 'madeup_index'),
+                os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'),
+                os.path.join(_sample_data_dir, 'sample_reads_for_mapper.log'))
+            
+        index_files = glob.glob(os.path.join(_sample_data_dir, 'test_index.*'))
+        for i in index_files:
+            os.remove(i)
+
+        s = os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam')
+        if os.path.isfile(s):
+            os.remove(s)
+        l = os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam')
+        if os.path.isfile(l):
+            os.remove(l)
+
         
 if __name__ == '__main__':
     unittest.main()

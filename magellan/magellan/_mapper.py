@@ -1,4 +1,9 @@
+
 import subprocess
+import pysam  # tested with version 0.13
+import os
+import pandas as pd
+import glob
 
 # Do we want to install bowtie? do we want to adapt to windows?
 # use logger?
@@ -29,6 +34,8 @@ def bowtie2_build_index(fasta_file, index, offrate=None):
                               stderr=subprocess.PIPE,
                               shell=True).communicate()
 
+    if len(glob.glob(index + '.*')) == 0:
+        raise RuntimeError('bowtie2 index files %s for %s are missing' % (index, fasta_file))
     
     
 def bowtie2_map(
@@ -64,4 +71,80 @@ def bowtie2_map(
     if err:
         raise RuntimeError('bowtie mapping failed for fastq %s' % (fastq_file))
 
+    if not os.path.isfile(out_log) or not os.path.isfile(out_sam):
+        raise RuntimeError('output files missing for bowtie2 run on %s' % (fastq_file))
+ 
+
+class AlignmentParser():
+    @staticmethod
+    def _sort_and_index(in_file, out_file):
+        pysam.sort('-o', out_file, in_file)
+        pysam.index(out_file)
+
+    def __init__(self, in_file):
+        '''
+        in_file could be bam or sam format. an extension of si (for sorted,indexed) is added
+        '''
+        self._base_path, fname = os.path.split(in_file)
+        f_base, f_ext = os.path.splitext(fname)
+        bam_name = f_base + '_si.bam'
+        self._bam_file = os.path.join(self._base_path, bam_name)
+        self._sort_and_index(in_file, self._bam_file)
+
+        self._alignment_file = pysam.AlignmentFile(self._bam_file, 'rb')
+
+    #check indices (0 baseD?)
+    def count_by_region(self,
+                        ref_name,
+                        start,
+                        stop,
+                        read_filter_callback='nofilter'):
+        return self._alignment_file.count(contig=ref_name, start=start, stop=stop, read_callback=read_filter_callback)
     
+    def count_all_references(self,
+                             read_filter_callback='nofilter'):
+        counts = []
+        for r, l in zip(self._alignment_file.references, self._alignment_file.lengths):
+            count_entry = {
+                'name': r,
+                'length': l,
+                'count': self.count_by_region(r, 0, l, read_filter_callback)}
+            counts.append(count_entry)
+        return pd.DataFrame(counts)
+
+    def filter(self,
+               contig=None,
+               start=None,
+               stop=None,
+               read_filter_callback='nofilter'):
+        reads_iterator = self._alignment_file.fetch(contig, start, stop)
+        for r in reads_iterator:
+            if read_filter_callback != 'nofilter' and read_filter_callback(r):
+                yield r
+
+    def write_reads(self,
+                    out_file,
+                    contig=None,
+                    start=None,
+                    stop=None,
+                    read_filter_callback='nofilter'):
+        
+        filtered_reads = pysam.AlignmentFile(out_file, 'wb', template=self._alignment_file)
+        reads_iterator = self._alignment_file.fetch(contig, start, stop)
+        for r in reads_iterator:
+            if read_filter_callback != 'nofilter' and read_filter_callback(r):
+                filtered_reads.write(r)
+        
+
+def is_high_map_quality(read, map_qual_threshold=5):
+    return read.mapping_quality > map_qual_threshold
+
+
+def has_low_mismatches(read, max_num_mismatches=5):
+    if not read.has_tag('NM'):
+        return False
+    return read.get_tag('NM') <= max_num_mismatches
+
+        
+
+        
