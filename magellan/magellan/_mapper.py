@@ -83,7 +83,7 @@ class AlignmentParser():
 
     def __init__(self, in_file):
         '''
-        in_file could be bam or sam format. an extension of si (for sorted,indexed) is added
+        in_file could be bam or sam format. an extension of si is added to the sorted, indexed bam file that is generated
         '''
         self._base_path, fname = os.path.split(in_file)
         f_base, f_ext = os.path.splitext(fname)
@@ -93,16 +93,27 @@ class AlignmentParser():
 
         self._alignment_file = pysam.AlignmentFile(self._bam_file, 'rb')
 
-    #check indices (0 baseD?)
     def count_by_region(self,
                         ref_name,
                         start,
                         stop,
                         read_filter_callback='nofilter'):
+        '''
+        Count reads mapped to a specified region (specified by reference name, start and end positions.
+        A callback function for filtering reads can be provided with read_filter_callback (default 'nofilter' for no filtering).
+        Reads returning True, will be retained
+        Returns - integer representing total number of reads mapped to region
+        '''
         return self._alignment_file.count(contig=ref_name, start=start, stop=stop, read_callback=read_filter_callback)
     
     def count_all_references(self,
                              read_filter_callback='nofilter'):
+        '''
+        Counts reads for all references appearing in the alignemnt file across their entire length. Internally calls count_by_region.
+        A callback function for filtering reads can be provided with read_filter_callback (default 'nofilter' for no filtering).
+        Reads returning True, will be retained
+        Returns a pandas dataframe with the following fields: name, length, count
+        '''
         counts = []
         for r, l in zip(self._alignment_file.references, self._alignment_file.lengths):
             count_entry = {
@@ -117,6 +128,10 @@ class AlignmentParser():
                start=None,
                stop=None,
                read_filter_callback='nofilter'):
+        '''
+        Creates an iterator over all reads either in a region or in the entire alignemnt file that meet a specific criteria specified by read_filter_callback
+        (default 'nofilter' for no filtering).
+        '''
         reads_iterator = self._alignment_file.fetch(contig, start, stop)
         for r in reads_iterator:
             if read_filter_callback != 'nofilter' and read_filter_callback(r):
@@ -124,27 +139,39 @@ class AlignmentParser():
 
     def write_reads(self,
                     out_file,
+                    write_sam=False,
                     contig=None,
                     start=None,
                     stop=None,
                     read_filter_callback='nofilter'):
-        
-        filtered_reads = pysam.AlignmentFile(out_file, 'wb', template=self._alignment_file)
+        '''
+        write reads to file, optionally using read filtering specified by read_filter_callback (default 'nofilter' for no filtering).
+        Can also be used to convert bam to sam format
+        '''
+        if write_sam:
+            filtered_reads = pysam.AlignmentFile(out_file, 'w', template=self._alignment_file)
+        else:
+            filtered_reads = pysam.AlignmentFile(out_file, 'wb', template=self._alignment_file)
         reads_iterator = self._alignment_file.fetch(contig, start, stop)
         for r in reads_iterator:
-            if read_filter_callback != 'nofilter' and read_filter_callback(r):
+            if read_filter_callback == 'nofilter' or read_filter_callback(r):
                 filtered_reads.write(r)
+        filtered_reads.close()
         
 
-def is_high_map_quality(read, map_qual_threshold=5):
-    return read.mapping_quality > map_qual_threshold
+def is_high_map_quality(read, min_qual_threshold=5):
+    '''
+    Example filter to be used as read_filter_callback when calling AlignmentParser functions.
+    Returns True is MAPQ for read is >= min_qual_threshold (default 5), False otherwise
+    '''
+    return read.mapping_quality >= min_qual_threshold
 
 
 def has_low_mismatches(read, max_num_mismatches=5):
-    if not read.has_tag('NM'):
+    '''
+    Example filter to be used as read_filter_callback when calling AlignmentParser functions.
+    Returns True is number of mismatches for read is <= max_num_mismatches (default 5), False otherwise
+    '''
+    if not read.has_tag('NM'):  # unaligned
         return False
     return read.get_tag('NM') <= max_num_mismatches
-
-        
-
-        
