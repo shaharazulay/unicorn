@@ -85,8 +85,9 @@ def install_bowtie2(base_folder=None, mac_os=False):
         bowtie2_install_folder = os.path.join(base_folder, 'bowtie2-2.3.4.3')
         bowtie2_download_file = os.path.split(os.path.split(bowtie2_url)[0])[1]
         print 'DEBUG: Did not find BOWTIE2, This is found url - ' + bowtie2_url + '. This is download dir - ' + bowtie2_install_folder
-        
-        os.mkdir(bowtie2_install_folder)
+
+        if not os.path.exists(bowtie2_install_folder):
+            os.mkdir(bowtie2_install_folder)
         
         # install the bowtie2 software
         print('Bowtie2 missing, installing')
