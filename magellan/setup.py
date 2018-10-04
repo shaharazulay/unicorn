@@ -109,7 +109,7 @@ def install_bowtie2(base_folder=None, mac_os=False):
                 if bowtie2_exe not in files:
                     raise EnvironmentError('Bowtie2 exe not found')
                 for f in files:
-                    if bowtie_exe in f:
+                    if bowtie2_exe in f:
                         os.chmod(os.path.join(exe_dir, f), 0o755)
                 
             except EnvironmentError:
