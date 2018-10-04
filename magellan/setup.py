@@ -100,7 +100,7 @@ def install_bowtie2(base_folder=None, mac_os=False):
         if not download_ok:
             install_error = True
         else:
-            #os.environ["PATH"] += os.pathsep + exe_dir
+            os.environ["PATH"] += os.pathsep + exe_dir
 
             files = []
             try:
