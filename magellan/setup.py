@@ -140,6 +140,7 @@ class _TestCommand(Command):
         pass
 
     def run(self):
+        install_bowtie2()
         run_str = "%s -m unittest discover test *test.py" % _python
         os.system(run_str)
 
