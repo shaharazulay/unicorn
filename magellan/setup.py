@@ -72,7 +72,6 @@ def install_bowtie2(base_folder=None, mac_os=False):
     """
 
     bowtie2_exe = 'bowtie2'
-    bowtie2_index_build = 'bowtie2-build'
     
     # Check if bowtie2 is already installed
     bowtie2_path = find_install(bowtie2_exe)  # find_exe_in_path(bowtie2_exe)
@@ -109,8 +108,9 @@ def install_bowtie2(base_folder=None, mac_os=False):
                 files = os.listdir(exe_dir)
                 if bowtie2_exe not in files:
                     raise EnvironmentError('Bowtie2 exe not found')
-                os.chmod(os.path.join(exe_dir, bowtie2_exe), 0o755)
-                os.chmod(os.path.join(exe_dir, bowtie2_index_build), 0o755)
+                for f in files:
+                    if bowtie_exe in f:
+                        os.chmod(os.path.join(exe_dir, f), 0o755)
                 
             except EnvironmentError:
                 print("WARNING: Bowtie2 files not found.")
