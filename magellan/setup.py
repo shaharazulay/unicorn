@@ -115,7 +115,7 @@ def install_bowtie2(install_folder=None, mac_os=False):
                 for f in files:
                     if bowtie2_exe in f:
                         try:
-                            shutil.copy(os.path.join(exe_dir, file), install_folder)
+                            shutil.copy(os.path.join(exe_dir, f), install_folder)
                             os.chmod(os.path.join(install_folder, f), 0o755)
                         except (EnvironmentError, shutil.Error):
                             print("Error copying installation files")
