@@ -86,7 +86,6 @@ def install_bowtie2(install_folder=None, mac_os=False):
         tmp_base_folder = tempfile.mkdtemp()
         tmp_bowtie2_install_folder = os.path.join(tmp_base_folder, 'bowtie2-2.3.4.3')
         bowtie2_download_file = os.path.split(os.path.split(bowtie2_url)[0])[1]
-        print 'DEBUG: Did not find BOWTIE2, This is found url - ' + bowtie2_url + '. This is download dir - ' + tmp_bowtie2_install_folder
 
         os.mkdir(tmp_bowtie2_install_folder)
         
@@ -94,7 +93,6 @@ def install_bowtie2(install_folder=None, mac_os=False):
         print('Bowtie2 missing, installing')
         install_error = False
         exe_dir = os.path.join(tmp_bowtie2_install_folder, os.path.splitext(bowtie2_download_file)[0])
-        print 'This is the expected exe dir ' + exe_dir
 
         download_ok = download_unpack_zip(
             bowtie2_url,
@@ -105,8 +103,6 @@ def install_bowtie2(install_folder=None, mac_os=False):
         if not download_ok:
             install_error = True
         else:
-            #os.environ["PATH"] += os.pathsep + exe_dir
-
             files = []
             try:
                 files = os.listdir(exe_dir)
@@ -161,7 +157,6 @@ class _TestCommand(Command):
         pass
 
     def run(self):
-        #install_bowtie2()
         run_str = "%s -m unittest discover test *test.py" % _python
         os.system(run_str)
 
