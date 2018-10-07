@@ -4,6 +4,8 @@ from setuptools import setup, Command
 from setuptools.command.install import install
 import zipfile
 import subprocess
+import tempfile
+import shutil
 
 try:
     from urllib.request import urlretrieve
@@ -65,7 +67,7 @@ def download_unpack_zip(url, dest_folder, filename, software_name):
         return False
         
 
-def install_bowtie2(base_folder=None, mac_os=False):
+def install_bowtie2(install_folder=None, mac_os=False):
     """
     Download and install the bowtie2 software if not already installed. Based on HumanN code at:
     https://bitbucket.org/biobakery/humann2/src/76e92a1250f0265dff390ba903ba22b8a74b6c8e/setup.py?at=default&fileviewer=file-view-default
@@ -81,27 +83,29 @@ def install_bowtie2(base_folder=None, mac_os=False):
         if mac_os:
             bowtie2_url = 'https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.3.4.3/bowtie2-2.3.4.3-macos-x86_64.zip/download'
 
-        if not base_folder:
-            base_folder = os.getcwd()
-        bowtie2_install_folder = os.path.join(base_folder, 'bowtie2-2.3.4.3')
+        tmp_base_folder = tempfile.mkdtemp()
+        tmp_bowtie2_install_folder = os.path.join(tmp_base_folder, 'bowtie2-2.3.4.3')
         bowtie2_download_file = os.path.split(os.path.split(bowtie2_url)[0])[1]
-        print 'DEBUG: Did not find BOWTIE2, This is found url - ' + bowtie2_url + '. This is download dir - ' + bowtie2_install_folder
+        print 'DEBUG: Did not find BOWTIE2, This is found url - ' + bowtie2_url + '. This is download dir - ' + tmp_bowtie2_install_folder
 
-        if not os.path.exists(bowtie2_install_folder):
-            os.mkdir(bowtie2_install_folder)
+        os.mkdir(tmp_bowtie2_install_folder)
         
         # install the bowtie2 software
         print('Bowtie2 missing, installing')
         install_error = False
-        exe_dir = os.path.join(bowtie2_install_folder, os.path.splitext(bowtie2_download_file)[0])
+        exe_dir = os.path.join(tmp_bowtie2_install_folder, os.path.splitext(bowtie2_download_file)[0])
         print 'This is the expected exe dir ' + exe_dir
 
-        download_ok = download_unpack_zip(bowtie2_url, bowtie2_install_folder, bowtie2_download_file, bowtie2_exe)
+        download_ok = download_unpack_zip(
+            bowtie2_url,
+            tmp_bowtie2_install_folder,
+            bowtie2_download_file,
+            bowtie2_exe)
         
         if not download_ok:
             install_error = True
         else:
-            os.environ["PATH"] += os.pathsep + exe_dir
+            #os.environ["PATH"] += os.pathsep + exe_dir
 
             files = []
             try:
@@ -110,8 +114,17 @@ def install_bowtie2(base_folder=None, mac_os=False):
                     raise EnvironmentError('Bowtie2 exe not found')
                 for f in files:
                     if bowtie2_exe in f:
-                        os.chmod(os.path.join(exe_dir, f), 0o755)
-                
+                        try:
+                            shutil.copy(os.path.join(exe_dir, file), install_folder)
+                            os.chmod(os.path.join(install_folder, f), 0o755)
+                        except (EnvironmentError, shutil.Error):
+                            print("Error copying installation files")
+                            install_error = True
+                try:
+                    shutil.rmtree(tmp_base_folder)
+                except EnvironmentError:
+                    print("WARNING: Unable to remove temp install folder.")
+        
             except EnvironmentError:
                 print("WARNING: Bowtie2 files not found.")
                 install_error = True
@@ -131,7 +144,9 @@ class _InstallCommand(install):
         mac_os = False
         if sys.platform in ['darwin', 'os2', 'os2emx']:
             mac_os = True
-        install_bowtie2(mac_os=mac_os)
+        install_bowtie2(
+            install_folder=os.path.join(self.install_base, 'bin'),
+            mac_os=mac_os)
         install.run(self)
 
         
@@ -146,7 +161,7 @@ class _TestCommand(Command):
         pass
 
     def run(self):
-        install_bowtie2()
+        #install_bowtie2()
         run_str = "%s -m unittest discover test *test.py" % _python
         os.system(run_str)
 
