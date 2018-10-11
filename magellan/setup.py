@@ -23,9 +23,10 @@ def find_install(software_name):
         software_path = subprocess.Popen(['which', software_name], stdout=subprocess.PIPE).communicate()[0].decode()
         if len(software_path) == 0:
             return None
-        if not os.access(software_path, os.X_OK):
-            return None
-        print 'Found software at: ' + software_path
+        # Tmp - below not working on max when software is exe, removing for now
+        #if not os.access(software_path, os.X_OK):
+        #    return None
+        print 'Found software with access at: ' + software_path
         return software_path
     except Exception:
         return None
