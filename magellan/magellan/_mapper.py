@@ -5,9 +5,6 @@ import os
 import pandas as pd
 import glob
 
-# Do we want to install bowtie? do we want to adapt to windows?
-# use logger?
-
 
 def _check_bowtie_install():
     '''
@@ -24,6 +21,14 @@ def _check_bowtie_install():
     
 
 def bowtie2_build_index(fasta_file, index, offrate=None):
+    '''
+    Create bowtie2 index
+    Arguments:
+    fasta_file - containing all sequences to be indexed in fasta format
+    index - base path for index
+    offrate - bowtie2's offrate. Controls lookup speed at the expense of memory. Lower values lead to faster lookups.
+              Default - None. Use bowtie2's default for this parameter
+    '''
     cmd = 'bowtie2-build %s %s' % (fasta_file, index)
     if offrate:
         cmd = cmd + ' -o ' + str(offrate)
@@ -76,6 +81,86 @@ def bowtie2_map(
  
 
 class AlignmentParser():
+    '''
+    A class for parsing, filtering and aggregating reads from sam and bam files.
+
+    Example:
+    >>> import os
+    >>> import pandas as pd
+    >>> import magellan
+    >>>
+    >>> _sample_data_dir = 'magellan/test/_sample_data'
+    >>>
+    >>> magellan.bowtie2_build_index(
+    ...     os.path.join(_sample_data_dir, 'sample_bac_genome_short.fa'),
+    ...     os.path.join(_sample_data_dir, 'test_index'))
+    running:  bowtie2-build magellan/test/_sample_data/sample_bac_genome_short.fa magellan/test/_sample_data/test_index
+    ...
+    >>> magellan.bowtie2_map(
+    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper.fastq'),
+    ...     os.path.join(_sample_data_dir, 'test_index'),
+    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'),
+    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper.log'))
+    bowtie2 -U magellan/test/_sample_data/sample_reads_for_mapper.fastq -x magellan/test/_sample_data/test_index -S magellan/test/_sample_data/sample_reads_for_mapper.sam 2> magellan/test/_sample_data/sample_reads_for_mapper.log
+    Bowtie2 version 2.3.4.3;  path: /Users/taliraveh/Downloads/bowtie2-2.3.4.3-macos-x86_64/bowtie2
+    >>>
+    >>> sam_reads = pd.read_csv(os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'), sep='\t', skiprows=5, header=None)
+    >>> sam_reads[[0, 2, 3, 4, 5]]
+    0                          2    3   4    5
+    0              read1_NZ_GL622401.1              NZ_GL622401.1    1  38  80M
+    1              read2_NZ_GL622401.1              NZ_GL622401.1   81   1  80M
+    2              read3_NZ_GL622401.1              NZ_GL622401.1  161   1  80M
+    3  read4_NZ_GL622401.1_fake_break1  NZ_GL622401.1_fake_break1    1  42  80M
+    4  read5_NZ_GL622401.1_fake_break1  NZ_GL622401.1_fake_break1   81  42  80M
+    5  read6_NZ_GL622401.1_fake_break2  NZ_GL622401.1_fake_break2    1  42  80M
+    >>>
+    >>>
+    >>>
+    >>> ap = magellan.AlignmentParser(os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'))
+    >>>
+    >>> ap.count_by_region('NZ_GL622401.1', 1, 100)
+    2
+    >>>
+    >>> read_df = ap.count_all_references()
+    >>> read_df
+    count  length                       name
+    0      3     400              NZ_GL622401.1
+    1      2     640  NZ_GL622401.1_fake_break1
+    2      1  329244  NZ_GL622401.1_fake_break2
+    >>>
+    >>> read_df = ap.count_all_references(read_filter_callback=lambda read: magellan.is_high_map_quality(read, 4))
+    >>> read_df
+    count  length                       name
+    0      1     400              NZ_GL622401.1
+    1      2     640  NZ_GL622401.1_fake_break1
+    2      1  329244  NZ_GL622401.1_fake_break2
+    >>>
+    >>>
+    >>> it = ap.filter(read_filter_callback=lambda read: magellan.is_high_map_quality(read, 39))
+    >>> for r in it:
+    ...     print r.query_name
+    ... 
+    read4_NZ_GL622401.1_fake_break1
+    read5_NZ_GL622401.1_fake_break1
+    read6_NZ_GL622401.1_fake_break2
+    >>>
+    >>> ap.write_reads(
+    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper_filtered_mapq4.sam'),
+    ...     write_sam=True,
+    ...     read_filter_callback=lambda read: magellan.is_high_map_quality(read, 4))
+    >>> sam_reads_filtered = pd.read_csv(
+    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper_filtered_mapq4.sam'),
+    ...     sep='\t',
+    ...     skiprows=5,
+    ...     header=None)
+    >>> sam_reads_filtered[[0, 2, 4, 5]]
+    0                          2   4    5
+    0              read1_NZ_GL622401.1              NZ_GL622401.1  38  80M
+    1  read4_NZ_GL622401.1_fake_break1  NZ_GL622401.1_fake_break1  42  80M
+    2  read5_NZ_GL622401.1_fake_break1  NZ_GL622401.1_fake_break1  42  80M
+    3  read6_NZ_GL622401.1_fake_break2  NZ_GL622401.1_fake_break2  42  80M
+    
+    '''
     @staticmethod
     def _sort_and_index(in_file, out_file):
         pysam.sort('-o', out_file, in_file)
