@@ -7,12 +7,22 @@ import subprocess
 import tempfile
 import shutil
 
+
 try:
     from urllib.request import urlretrieve
 except ImportError:
     from urllib import urlretrieve
 
 _python = 'python%d' % sys.version_info.major
+
+
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
+
+reqs = parse_requirements('./requirements.txt')
 
 
 def find_install(software_name):
@@ -174,7 +184,8 @@ setup(
     license='bsd',
     description='Detection of gene-level deletions, to uncover new bacterial strains',
     long_description=open('docs/README.rst').read(),
-    install_requires=[],
+    install_requires=reqs,
+    setup_requires=reqs,
     zip_safe=False,
     package_data={},
     include_package_data=True,
