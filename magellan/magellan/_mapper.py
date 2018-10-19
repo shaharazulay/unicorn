@@ -89,22 +89,10 @@ class AlignmentParser():
     >>> import pandas as pd
     >>> import magellan
     >>>
-    >>> _sample_data_dir = 'magellan/test/_sample_data'
+    >>> dir_path = os.path.dirname(os.path.realpath(__file__))
+    >>> _sample_data_dir = os.path.join(dir_path, '../test/_sample_data')
     >>>
-    >>> magellan.bowtie2_build_index(
-    ...     os.path.join(_sample_data_dir, 'sample_bac_genome_short.fa'),
-    ...     os.path.join(_sample_data_dir, 'test_index'))
-    running:  bowtie2-build magellan/test/_sample_data/sample_bac_genome_short.fa magellan/test/_sample_data/test_index
-    ...
-    >>> magellan.bowtie2_map(
-    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper.fastq'),
-    ...     os.path.join(_sample_data_dir, 'test_index'),
-    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'),
-    ...     os.path.join(_sample_data_dir, 'sample_reads_for_mapper.log'))
-    bowtie2 -U magellan/test/_sample_data/sample_reads_for_mapper.fastq -x magellan/test/_sample_data/test_index -S magellan/test/_sample_data/sample_reads_for_mapper.sam 2> magellan/test/_sample_data/sample_reads_for_mapper.log
-    Bowtie2 version 2.3.4.3;  path: /Users/taliraveh/Downloads/bowtie2-2.3.4.3-macos-x86_64/bowtie2
-    >>>
-    >>> sam_reads = pd.read_csv(os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'), sep='\t', skiprows=5, header=None)
+    >>> sam_reads = pd.read_csv(os.path.join(_sample_data_dir, 'sample.sam'), sep='\t', skiprows=5, header=None)
     >>> sam_reads[[0, 2, 3, 4, 5]]
     0                          2    3   4    5
     0              read1_NZ_GL622401.1              NZ_GL622401.1    1  38  80M
@@ -116,7 +104,7 @@ class AlignmentParser():
     >>>
     >>>
     >>>
-    >>> ap = magellan.AlignmentParser(os.path.join(_sample_data_dir, 'sample_reads_for_mapper.sam'))
+    >>> ap = magellan.AlignmentParser(os.path.join(_sample_data_dir, 'sample.sam'))
     >>>
     >>> ap.count_by_region('NZ_GL622401.1', 1, 100)
     2
