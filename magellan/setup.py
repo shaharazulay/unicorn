@@ -3,6 +3,7 @@ import sys
 from setuptools import setup, Command
 from setuptools.command.install import install
 import zipfile
+import tarfile
 import subprocess
 import tempfile
 import shutil
@@ -56,7 +57,7 @@ def find_exe_in_path(software_name):
     return None
 
 
-def download_unpack_zip(url, dest_folder, filename, software_name):
+def download_unpack_compressed_file(url, dest_folder, filename, software_name, filetype='zip'):
     """
     Download the url to the file and decompress into the folder
     """
@@ -69,15 +70,24 @@ def download_unpack_zip(url, dest_folder, filename, software_name):
     urlretrieve(url, os.path.join(dest_folder, filename))
     
     try:
-        zipfile_handle = zipfile.ZipFile(os.path.join(dest_folder, filename))
-        zipfile_handle.extractall(path=dest_folder)
-        zipfile_handle.close()
+        if filetype == 'zip':
+            zipfile_handle = zipfile.ZipFile(os.path.join(dest_folder, filename))
+            zipfile_handle.extractall(path=dest_folder)
+            zipfile_handle.close()
+        elif filetype == 'tar':
+            if filename.endswith('tar.gz'):
+                tf = tarfile.open(os.path.join(dest_folder, filename), 'r:gz')
+            else:
+                tf = tarfile.open(os.path.join(dest_folder, filename))
+            tf.extractall(path=dest_folder)
+            tf.close()
         return True
     except EnvironmentError:
         print 'WARNING: Unable to extract ' + software_name
         return False
         
 
+        
 def install_bowtie2(install_folder=None, mac_os=False):
     """
     Download and install the bowtie2 software if not already installed. Based on HumanN code at:
@@ -105,7 +115,7 @@ def install_bowtie2(install_folder=None, mac_os=False):
         install_error = False
         exe_dir = os.path.join(tmp_bowtie2_install_folder, os.path.splitext(bowtie2_download_file)[0])
 
-        download_ok = download_unpack_zip(
+        download_ok = download_unpack_compressed_file(
             bowtie2_url,
             tmp_bowtie2_install_folder,
             bowtie2_download_file,
